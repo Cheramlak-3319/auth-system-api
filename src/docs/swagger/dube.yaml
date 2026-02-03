@@ -1,0 +1,326 @@
+openapi: 3.0.3
+info:
+  title: HellOOpass DUBE International API
+  description: API documentation for DUBE International module
+  version: 1.0.0
+
+tags:
+  - name: Dube International
+    description: Merchant and customer management operations
+
+paths:
+  /dube/international/getmerchantlist.php:
+    get:
+      tags:
+        - Dube International
+      summary: Get Merchant List
+      description: Retrieves a list of merchants with filtering and pagination
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/mobile"
+        - $ref: "#/components/parameters/project"
+        - $ref: "#/components/parameters/countryCode"
+        - $ref: "#/components/parameters/active"
+      responses:
+        "200":
+          $ref: "#/components/responses/MerchantListResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /dube/international/getcustomerlist.php:
+    get:
+      tags:
+        - Dube International
+      summary: Get Customer List
+      description: Retrieves a list of customers
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/mobile"
+        - $ref: "#/components/parameters/countryCode"
+      responses:
+        "200":
+          $ref: "#/components/responses/CustomerListResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  # Add all other endpoints similarly...
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    limit:
+      in: query
+      name: limit
+      description: Number of results to return
+      required: false
+      schema:
+        type: integer
+        format: int32
+        example: 10
+        minimum: 1
+        maximum: 100
+
+    page:
+      in: query
+      name: Page
+      description: Page number for pagination
+      required: false
+      schema:
+        type: integer
+        format: int32
+        example: 1
+        minimum: 1
+
+    userId:
+      in: query
+      name: userId
+      description: 6-digit user ID
+      required: false
+      schema:
+        type: integer
+        format: int32
+        example: 123456
+
+    mobile:
+      in: query
+      name: mobile
+      description: Mobile number with international dial code
+      required: false
+      schema:
+        type: string
+        example: "+251912345678"
+
+    countryCode:
+      in: query
+      name: countryCode
+      description: ISO 3166-1 alpha-2 country code
+      required: false
+      schema:
+        type: string
+        pattern: "^[A-Z]{2}$"
+        example: "ET"
+
+    active:
+      in: query
+      name: active
+      description: Active status filter
+      required: false
+      schema:
+        type: string
+        enum: ["0", "1"]
+        example: "1"
+
+  responses:
+    MerchantListResponse:
+      description: List of merchants retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MerchantList"
+
+    CustomerListResponse:
+      description: List of customers retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CustomerList"
+
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    Unauthorized:
+      description: Unauthorized - Missing or invalid token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Error message"
+
+    MerchantList:
+      type: object
+      properties:
+        error:
+          type: boolean
+          example: false
+        totalCount:
+          type: string
+          example: "2792"
+        message:
+          type: array
+          items:
+            $ref: "#/components/schemas/Merchant"
+
+    Merchant:
+      type: object
+      properties:
+        userid:
+          type: string
+          example: "123456"
+        fullname:
+          type: string
+          example: "hello shop"
+        businessName:
+          type: string
+          example: "hello shop"
+        mobile:
+          type: string
+          example: "251912345678"
+        createdon:
+          type: string
+          format: date-time
+          example: "2024-11-12 07:08:55"
+        project:
+          type: string
+          example: "Palladium"
+        initialdeposit:
+          type: string
+          example: "0.00"
+        bnpl:
+          type: string
+          example: "0.00"
+        active:
+          type: string
+          example: "1"
+        lastTrxnDate:
+          type: string
+          format: date-time
+          example: "2024-11-15 14:46:27"
+        language:
+          type: string
+          example: "en"
+        wallets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Wallet"
+        foodCategory:
+          type: string
+          example: "desert"
+
+    Wallet:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "1234567890"
+        wallettype:
+          type: string
+          example: "MERCHANT_AVAILABLE"
+        balance:
+          type: string
+          example: "2000000"
+        bnpl:
+          type: string
+          example: "2000000"
+
+    CustomerList:
+      type: object
+      properties:
+        error:
+          type: boolean
+          example: false
+        totalCount:
+          type: string
+          example: "2792"
+        message:
+          type: array
+          items:
+            $ref: "#/components/schemas/Customer"
+
+    Customer:
+      type: object
+      properties:
+        userid:
+          type: string
+          example: "123456"
+        fullname:
+          type: string
+          example: "hello shop"
+        mobile:
+          type: string
+          example: "25112345678"
+        creditwallet:
+          type: string
+          example: "1234567890"
+        purchasewallet:
+          type: string
+          example: "1234567890"
+        purchasebalance:
+          type: string
+          example: "0.00"
+        createdon:
+          type: string
+          format: date-time
+          example: "2024-11-12 07:08:55"
+        createdby:
+          type: string
+          example: "233900000002"
+        merchantName:
+          type: string
+          example: "hello shop"
+        merchantUserId:
+          type: string
+          example: "123456"
+        active:
+          type: string
+          example: "1"
+        bnpl:
+          type: string
+          example: "0.00"
+        otherCreditLines:
+          type: array
+          items: {}
+        gifts:
+          type: array
+          items: {}

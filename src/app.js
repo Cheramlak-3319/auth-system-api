@@ -1,92 +1,163 @@
-// ========================================
-// FILE: src/app.js
-// DESC: Main Express application configuration
-// ========================================
-
-// Load environment variables first
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const path = require("path");
 require("dotenv").config();
 
-// Import required modules
-const express = require("express");
-const helmet = require("helmet");
-const cors = require("cors");
-const morgan = require("morgan");
+// Import routes
+const authRoutes = require("./routes/authRoutes");
+const dubeRoutes = require("./routes/dubeRoutes");
+const wfpRoutes = require("./routes/wfpRoutes");
 
-// Create Express application
+// Import middleware
+const { errorHandler } = require("./middleware/errorHandler");
+
 const app = express();
 
-// ========================================
-// MIDDLEWARE SETUP
-// ========================================
+// ========================
+// Database Connection
+// ========================
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error);
+    process.exit(1);
+  }
+};
 
-// 1. Security headers
+connectDB();
+
+// ========================
+// Middleware
+// ========================
+
+// Security headers
 app.use(helmet());
 
-// 2. Enable CORS (Cross-Origin Resource Sharing)
+// CORS
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : "*",
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   }),
 );
 
-// 3. Request logging (only in development)
+// Logging
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
-  console.log("📝 Morgan logging enabled for development");
+} else {
+  app.use(morgan("combined"));
 }
 
-// 4. Parse JSON bodies
+// Body parsing
 app.use(express.json({ limit: "10mb" }));
-
-// 5. Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// ========================================
-// TEST ROUTE
-// ========================================
+// ========================
+// Health Check
+// ========================
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    database:
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    environment: process.env.NODE_ENV,
+  });
+});
 
 app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "🚀 Authentication System API is running!",
+  res.json({
+    message: "🚀 HellOOpass API Server",
     version: "1.0.0",
-    documentation: `${process.env.BASE_URL}/api-docs`,
-    environment: process.env.NODE_ENV,
-    timestamp: new Date().toISOString(),
+    documentation: "/api-docs",
+    health: "/health",
+    modules: {
+      auth: "/api/v1/auth",
+      dube: "/api/v1/dube",
+      wfp: "/api/v1/wfp",
+    },
   });
 });
 
-// ========================================
-// 404 HANDLER
-// ========================================
+// ========================
+// API Routes
+// ========================
 
-app.use((req, res) => {
+// Public routes
+app.use("/api/v1/auth", authRoutes);
+
+// Protected DUBE routes (only if module is enabled)
+if (process.env.ENABLE_DUBE_MODULE === "true") {
+  app.use("/api/v1/dube", dubeRoutes);
+  console.log("✅ DUBE module enabled");
+}
+
+// Protected WFP routes (only if module is enabled)
+if (process.env.ENABLE_WFP_MODULE === "true") {
+  app.use("/api/v1/wfp", wfpRoutes);
+  console.log("✅ WFP module enabled");
+}
+
+// ========================
+// Error Handling
+// ========================
+
+// 404 handler
+app.use("*", (req, res) => {
   res.status(404).json({
     success: false,
-    message: `🔍 Route not found: ${req.originalUrl}`,
-    suggestion: "Check the API documentation for available endpoints",
+    message: `Route ${req.originalUrl} not found`,
   });
 });
 
-// ========================================
-// ERROR HANDLING MIDDLEWARE
-// ========================================
+// Global error handler
+app.use(errorHandler);
 
-app.use((err, req, res, next) => {
-  console.error("❌ Error:", err.stack);
+// ========================
+// Server Start
+// ========================
+const PORT = process.env.PORT || 5000;
 
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
+const server = app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+  console.log(
+    `🔗 Base URL: ${process.env.BASE_URL || `http://localhost:${PORT}`}`,
+  );
+  console.log(
+    `🔐 Auth API: ${process.env.BASE_URL || `http://localhost:${PORT}`}/api/v1/auth`,
+  );
 
-  res.status(statusCode).json({
-    success: false,
-    message: message,
-    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
+  if (process.env.ENABLE_DUBE_MODULE === "true") {
+    console.log(
+      `🌍 DUBE API: ${process.env.BASE_URL || `http://localhost:${PORT}`}/api/v1/dube`,
+    );
+  }
+
+  if (process.env.ENABLE_WFP_MODULE === "true") {
+    console.log(
+      `🌾 WFP API: ${process.env.BASE_URL || `http://localhost:${PORT}`}/api/v1/wfp`,
+    );
+  }
+});
+
+// Graceful shutdown
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received. Shutting down gracefully...");
+  server.close(() => {
+    console.log("Process terminated.");
   });
 });
 
-// Export the app
 module.exports = app;
