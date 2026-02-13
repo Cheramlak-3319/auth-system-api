@@ -151,16 +151,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/dube", verifyToken, dubeRoutes);
 app.use("/api/wfp", verifyToken, wfpRoutes);
 
-// ---------- MONGODB ----------
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB error:", err));
-
 const PORT = process.env.PORT || 5555;
 
 // ---------- VERCEL SERVERLESS EXPORT ----------
-module.exports = app;
 
 // ---------- LOCAL DEVELOPMENT SERVER ----------
 if (require.main === module) {
@@ -182,3 +175,5 @@ if (require.main === module) {
     console.log(`🔐 Login page: http://localhost:${PORT}/login.html`);
   });
 }
+
+module.exports = app;
