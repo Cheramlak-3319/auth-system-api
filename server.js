@@ -154,26 +154,33 @@ app.use("/api/wfp", verifyToken, wfpRoutes);
 const PORT = process.env.PORT || 5555;
 
 // ---------- VERCEL SERVERLESS EXPORT ----------
+module.exports = app;
 
 // ---------- LOCAL DEVELOPMENT SERVER ----------
 if (require.main === module) {
-  const PORT = process.env.PORT || 5555;
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    console.log(
-      `📘 Dube Admin Swagger: http://localhost:${PORT}/api-docs/dube/admin`,
-    );
-    console.log(
-      `📘 Dube Viewer Swagger: http://localhost:${PORT}/api-docs/dube/viewer`,
-    );
-    console.log(
-      `📘 WFP Admin Swagger: http://localhost:${PORT}/api-docs/wfp/admin`,
-    );
-    console.log(
-      `📘 WFP Viewer Swagger: http://localhost:${PORT}/api-docs/wfp/viewer`,
-    );
-    console.log(`🔐 Login page: http://localhost:${PORT}/login.html`);
-  });
+  (async () => {
+    try {
+      await connectDB(); // ensure DB is connected before listening
+      const PORT = process.env.PORT || 5555;
+      app.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+        console.log(
+          `📘 Dube Admin Swagger: http://localhost:${PORT}/api-docs/dube/admin`,
+        );
+        console.log(
+          `📘 Dube Viewer Swagger: http://localhost:${PORT}/api-docs/dube/viewer`,
+        );
+        console.log(
+          `📘 WFP Admin Swagger: http://localhost:${PORT}/api-docs/wfp/admin`,
+        );
+        console.log(
+          `📘 WFP Viewer Swagger: http://localhost:${PORT}/api-docs/wfp/viewer`,
+        );
+        console.log(`🔐 Login page: http://localhost:${PORT}/login.html`);
+      });
+    } catch (err) {
+      console.error("❌ Failed to connect to MongoDB:", err);
+      process.exit(1);
+    }
+  })();
 }
-
-module.exports = app;
