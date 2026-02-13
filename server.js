@@ -6,7 +6,6 @@ const YAML = require("yamljs");
 const path = require("path");
 const { verifyToken, checkRole } = require("./middleware/auth");
 const { extractToken } = require("./middleware/auth");
-require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 const authRoutes = require("./routes/authRoutes");
@@ -27,14 +26,10 @@ app.use(
 app.use(express.static(path.join(__dirname, "public")));
 
 // Load generated OpenAPI files
-const dubeFull = YAML.load(path.join(__dirname, "openapi/dube-full.yaml"));
-const dubeReadOnly = YAML.load(
-  path.join(__dirname, "openapi/dube-readonly.yaml"),
-);
-const wfpFull = YAML.load(path.join(__dirname, "openapi/wfp-full.yaml"));
-const wfpReadOnly = YAML.load(
-  path.join(__dirname, "openapi/wfp-readonly.yaml"),
-);
+const dubeFull = YAML.load(path.resolve("openapi/dube-full.yaml"));
+const dubeReadOnly = YAML.load(path.resolve("openapi/dube-readonly.yaml"));
+const wfpFull = YAML.load(path.resolve("openapi/wfp-full.yaml"));
+const wfpReadOnly = YAML.load(path.resolve("openapi/wfp-readonly.yaml"));
 
 const serveSwaggerUI = (swaggerDoc, allowedRoles) => {
   return (req, res, next) => {
