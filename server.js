@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.BASE_URL || "http://localhost:5555",
+    origin: ["http://localhost:5555", "https://auth-system-api-phi.vercel.app"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
