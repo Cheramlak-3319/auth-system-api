@@ -95,7 +95,7 @@ const serveSwaggerUI = (swaggerDoc, allowedRoles) => {
   };
 };
 
-// ---------- DUBE ----------
+// ---------- DUBE SWAGGER ----------
 app.use(
   "/api-docs/dube/admin",
   swaggerUi.serveFiles(dubeFull, {
@@ -112,7 +112,7 @@ app.use(
   serveSwaggerUI(dubeReadOnly, ["dube-viewer"]),
 );
 
-// ---------- WFP ----------
+// ---------- WFP SWAGGER ----------
 app.use(
   "/api-docs/wfp/admin",
   swaggerUi.serveFiles(wfpFull, {
@@ -128,6 +128,7 @@ app.use(
   }),
   serveSwaggerUI(wfpReadOnly, ["wfp-viewer"]),
 );
+
 // ---------- HEALTH ----------
 app.get("/health", (req, res) => {
   res.json({
@@ -151,7 +152,38 @@ app.use("/api/auth", authRoutes);
 app.use("/api/dube", verifyToken, dubeRoutes);
 app.use("/api/wfp", verifyToken, wfpRoutes);
 
-const PORT = process.env.PORT || 5555;
+// ---------- MONGODB CONNECTION (cached for serverless) ----------
+let cached = global.mongoose;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+async function connectDB() {
+  if (cached.conn) return cached.conn;
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(process.env.MONGO_URI)
+      .then((mongoose) => {
+        console.log("✅ MongoDB connected");
+        return mongoose;
+      });
+  }
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
+
+// Middleware to ensure DB is connected before any request (optional but safe)
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("❌ DB connection middleware error:", err);
+    res
+      .status(500)
+      .json({ error: true, message: "Database connection failed" });
+  }
+});
 
 // ---------- VERCEL SERVERLESS EXPORT ----------
 module.exports = app;
