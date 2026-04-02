@@ -1,0 +1,1465 @@
+paths:
+  /wfp/getbeneficiarylist.php:
+    get:
+      tags:
+        - WFP
+      summary: Get Beneficiary list
+      description: Get All Beneficiary list
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      responses:
+        "200":
+          description: Successful response with Beneficiary list.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  totalCount:
+                    type: string
+                    example: "10320"
+                  message:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        mainWallet:
+                          type: string
+                          example: "1198916900"
+                        beneficiaryName:
+                          type: string
+                          example: "Solomon waleligh"
+                        mobile:
+                          type: string
+                          example: "251961201230"
+                        mainWalletBalance:
+                          type: string
+                          example: "600.00"
+                        subWallets:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              walletName:
+                                type: string
+                                example: "Oil"
+                              walletBalance:
+                                type: string
+                                example: "100.00"
+                              cycle:
+                                type: string
+                                example: "Test Cycle-2"
+                          example:
+                            - walletName: "Oil"
+                              walletBalance: "100.00"
+                              cycle: "Test Cycle-2"
+                            - walletName: "Eggs"
+                              walletBalance: "100.00"
+                              cycle: "Test Cycle-2"
+                            - walletName: "Vegetables"
+                              walletBalance: "100.00"
+                              cycle: "Test Cycle-2"
+                            - walletName: "Cereal"
+                              walletBalance: "100.00"
+                              cycle: "Test Cycle-2"
+                            - walletName: "Pulses"
+                              walletBalance: "100.00"
+                              cycle: "Test Cycle-2"
+                            - walletName: "Salt"
+                              walletBalance: "100.00"
+                              cycle: "Test Cycle-2"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/getallinvoices.php:
+    get:
+      tags:
+        - WFP
+      summary: Fetch Invoices Summary
+      description: Retrieves a summary of invoices.
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      responses:
+        "200":
+          description: Successful response with invoices summary.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  totalCount:
+                    type: string
+                    example: "270792"
+                  message:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        transactionId:
+                          type: string
+                          example: "WFPWP8923034201839"
+                        merchantUserId:
+                          type: string
+                          example: "123456"
+                        merchantName:
+                          type: string
+                          example: "Gesese Molla"
+                        merchantMobile:
+                          type: string
+                          example: "251938905964"
+                        householdId:
+                          type: string
+                          example: "ETNUT000000"
+                        customerName:
+                          type: string
+                          example: "Mulushewa Moges"
+                        customerMobile:
+                          type: string
+                          example: "251913663497"
+                        amount:
+                          type: number
+                          example: 933.68
+                        transactionDate:
+                          type: string
+                          example: "2025-02-13 08:11:26"
+                        transactionStatus:
+                          type: string
+                          example: "FAILED"
+                        remark:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              categoryName:
+                                type: string
+                                example: "Oil"
+                              order:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    itemName:
+                                      type: string
+                                      example: "Oil"
+                                    unitPrice:
+                                      type: string
+                                      example: "100.00"
+                                    quantity:
+                                      type: string
+                                      example: "2"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/gettotalinvoices.php:
+    get:
+      tags:
+        - WFP
+      summary: Get Total Invoices
+      description: Get total invoices summary
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      responses:
+        "200":
+          description: Total invoices retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: object
+                    properties:
+                      totalAmount:
+                        type: string
+                        example: "200,291,934.04"
+                      totalNumber:
+                        type: string
+                        example: "143700"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/gettotalcredit.php:
+    get:
+      tags:
+        - WFP
+      summary: Fetch Credits Summary
+      description: Retrieves a summary of credits.
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      responses:
+        "200":
+          description: Successful response with credits summary.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: object
+                    properties:
+                      totalAmount:
+                        type: string
+                        example: "200,291,934.04"
+                      totalNumber:
+                        type: string
+                        example: "143700"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/getcashouttotals.php:
+    get:
+      tags:
+        - WFP
+      summary: Fetch Cashouts
+      description: Retrieves cashout transactions with optional filters
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      parameters:
+        - name: voucher
+          in: query
+          description: Voucher code or ID
+          required: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: Pagination offset
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: dateFrom
+          in: query
+          description: Start date filter (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          description: End date filter (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: limit
+          in: query
+          description: Number of records per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Cashout totals retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: object
+                    properties:
+                      totalCashoutAmount:
+                        type: string
+                        example: "200,291,934.04"
+                      totalCashoutNumber:
+                        type: string
+                        example: "143700"
+                      totalCashoutFeeAmount:
+                        type: string
+                        example: "92010.93919999992"
+                      totalCashoutFeeNumber:
+                        type: string
+                        example: "143700"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/getcashouthistory.php:
+    get:
+      tags:
+        - WFP
+      summary: Fetch Cashout Summary
+      description: Retrieves a summary of cashouts
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      responses:
+        "200":
+          description: Successful response with cashout summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  totalCount:
+                    type: string
+                    example: "7"
+                  message:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        wallet:
+                          type: string
+                          example: "1234567890"
+                        userId:
+                          type: string
+                          example: "123456"
+                        name:
+                          type: string
+                          example: "hello shop"
+                        mobile:
+                          type: string
+                          example: "251900000000"
+                        bank:
+                          type: string
+                          example: "Bank of Abyssinia"
+                        accountNumber:
+                          type: string
+                          example: "1234567890"
+                        amount:
+                          type: string
+                          example: "1000.00"
+                        status:
+                          type: string
+                          example: "PROCESSED"
+                        requestDate:
+                          type: string
+                          example: "2024-01-01"
+                        transactionData:
+                          type: object
+                          properties:
+                            error:
+                              type: boolean
+                              example: false
+                            message:
+                              type: string
+                              example: "Successfully processed"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/getcredittransferhistory.php:
+    get:
+      tags:
+        - WFP
+      summary: Fetch Credit Transfer History
+      description: Retrieves credit transfer history with optional filters.
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      parameters:
+        - name: walletId
+          in: query
+          description: Unique ID of the wallet.
+          required: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: Pagination offset.
+          required: false
+          schema:
+            type: integer
+        - name: houseHoldId
+          in: query
+          description: Unique ID of the household.
+          required: false
+          schema:
+            type: string
+        - name: householdId
+          in: query
+          description: Household ID filter.
+          required: false
+          schema:
+            type: string
+        - name: dateTo
+          in: query
+          description: End date filter (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: limit
+          in: query
+          description: Number of records per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: cycle
+          in: query
+          description: Cycle filter.
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Credit transfer history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  totalCount:
+                    type: string
+                    example: "7"
+                  message:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        transactionId:
+                          type: string
+                          example: "TRX001"
+                        householdId:
+                          type: string
+                          example: "ETNUT000000"
+                        wallet:
+                          type: string
+                          example: "1234567890"
+                        customerName:
+                          type: string
+                          example: "John Doe"
+                        customerMobile:
+                          type: string
+                          example: "251900000000"
+                        amount:
+                          type: string
+                          example: "1000.00"
+                        transactionDate:
+                          type: string
+                          example: "2024-01-01"
+                        transactionData:
+                          type: string
+                          example: "Additional data"
+                        transactionStatus:
+                          type: string
+                          example: "PROCESSED"
+                        cycle:
+                          type: string
+                          example: "Cycle-1"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/getonboardingagentlist.php:
+    get:
+      tags:
+        - WFP
+      summary: Get Onboarding Agent List
+      description: Get onboarding agent list
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      responses:
+        "200":
+          description: Onboarding agent list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  totalCount:
+                    type: string
+                    example: "7"
+                  message:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: "hello shop"
+                        mobile:
+                          type: string
+                          example: "251900000000"
+                        active:
+                          type: string
+                          example: "1"
+                        registeredOn:
+                          type: string
+                          example: "2024-01-01"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/gettotals.php:
+    get:
+      tags:
+        - WFP
+      summary: Get WFP System Totals
+      description: Get WFP system-wide totals and statistics
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      parameters:
+        - in: query
+          name: start
+          description: |
+            Start date or parameter for filtering
+            - Example: `"2024-01-01"`
+          required: false
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end
+          description: |
+            End date or parameter for filtering
+            - Example: `"2024-12-31"`
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: WFP system totals retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: object
+                    properties:
+                      totalCashoutAmount:
+                        type: string
+                        example: "2082"
+                      totalCashoutNumber:
+                        type: number
+                        example: 77056
+                      totalCreditAmount:
+                        type: string
+                        example: "2796"
+                      totalCreditNumber:
+                        type: string
+                        example: "77059"
+                      totalInvoiceAmount:
+                        type: string
+                        example: "635"
+                      totalInvoiceNumber:
+                        type: string
+                        example: "36307"
+                      totalBenefitedMerchantAmount:
+                        type: string
+                        example: "537"
+                      totalBenefitedMerchantNumber:
+                        type: string
+                        example: "137"
+                      totalBenefitedBeneficiaryAmount:
+                        type: number
+                        example: 69255702.57
+                      totalBenefitedBeneficiaryNumber:
+                        type: string
+                        example: "234669"
+                      totalPurchases:
+                        type: object
+                        properties:
+                          Vegetables:
+                            type: string
+                            example: "1000"
+                          Eggs:
+                            type: string
+                            example: "1000"
+                          Oil:
+                            type: string
+                            example: "1000"
+                          Fruits:
+                            type: string
+                            example: "1000"
+                          Cereal:
+                            type: string
+                            example: "1000"
+                          Pulses:
+                            type: string
+                            example: "1000"
+                          Salt:
+                            type: string
+                            example: "1000"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/gethealthofficerlist.php:
+    get:
+      tags:
+        - WFP
+      summary: Get Health Officer List
+      description: Get health officer list
+      x-roles:
+        - wfp_admin
+        - wfp_viewer
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results per page.
+          required: false
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Page number.
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Health officer list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  totalCount:
+                    type: string
+                    example: "7"
+                  message:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: "hello shop"
+                        mobile:
+                          type: string
+                          example: "251900000000"
+                        active:
+                          type: string
+                          example: "1"
+                        registeredOn:
+                          type: string
+                          example: "2024-01-01"
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/registerhealthofficer.php:
+    post:
+      tags:
+        - WFP
+      summary: Register Health Officer
+      description: Register a new Health Officer
+      x-roles:
+        - wfp_admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - hoName
+                - hoMobile
+              properties:
+                hoName:
+                  type: string
+                  example: "Sintayehu Adane"
+                hoMobile:
+                  type: string
+                  example: "+251940302084"
+      responses:
+        "201":
+          description: Health Officer registered successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Health Officer registered successfully."
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/changebeneficiarystatus.php:
+    post:
+      tags:
+        - WFP
+      summary: Change Beneficiary Status
+      description: Updates the status of a beneficiary household.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - householdId
+                - status
+              properties:
+                householdId:
+                  type: string
+                  example: "ETNUT000000"
+                status:
+                  type: string
+                  example: "ACTIVE"
+      responses:
+        "200":
+          description: Beneficiary status updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Beneficiary status updated successfully."
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/registeronboardingagents.php:
+    post:
+      tags:
+        - WFP
+      summary: Register Onboarding Agent
+      description: Create Onboarding Agent.
+      x-roles:
+        - wfp_admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - agentName
+                - agentMobile
+              properties:
+                agentName:
+                  type: string
+                  example: "John Doe"
+                agentMobile:
+                  type: string
+                  example: "+251900000000"
+      responses:
+        "201":
+          description: Onboarding Agent registered successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Onboarding Agent registered successfully."
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/updateonboardingagent.php:
+    post:
+      tags:
+        - WFP
+      summary: Update Onboarding Agent
+      description: Updates Onboarding Agent status.
+      x-roles:
+        - wfp_admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mobile
+                - active
+              properties:
+                mobile:
+                  type: string
+                  example: "251900000000"
+                active:
+                  type: string
+                  example: "1"
+      responses:
+        "200":
+          description: Onboarding Agent updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Onboarding Agent updated successfully."
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/updatefoodcategorylist.php:
+    post:
+      tags:
+        - WFP
+      summary: Update Food Category List
+      description: Updates Food Category List for a merchant.
+      x-roles:
+        - wfp_admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mobile
+                - categoryList
+              properties:
+                mobile:
+                  type: string
+                  example: "251900000000"
+                categoryList:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    [
+                      "Oil",
+                      "Vegetables",
+                      "Pulses",
+                      "Cereal",
+                      "Salt",
+                      "Fruits",
+                      "Cereals",
+                    ]
+      responses:
+        "200":
+          description: Food category list updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Food category list updated successfully."
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/transfercredit.php:
+    post:
+      tags:
+        - WFP
+      summary: Transfer Credit
+      description: Transfer credit to beneficiary.
+      x-roles:
+        - wfp_admin
+      parameters:
+        - name: walletId
+          in: query
+          description: Unique ID of the wallet
+          required: false
+          schema:
+            type: string
+        - name: houseHoldId
+          in: query
+          description: Unique ID of the household
+          required: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: Pagination offset
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: dateFrom
+          in: query
+          description: Start date filter (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          description: End date filter (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: cycleFilter
+          in: query
+          description: Filter transactions by cycle (e.g., daily, weekly, monthly)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Number of records per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - householdId
+                - cycle
+              properties:
+                householdId:
+                  type: string
+                  example: "Z876543210"
+                cycle:
+                  type: string
+                  example: "Ywh8Epr6-CDd3-PgQs-BcRr-vtRYzr8GlTP4"
+      responses:
+        "200":
+          description: Credit transferred successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Credit transferred successfully."
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
+
+  /wfp/validatedisbursement.php:
+    post:
+      tags:
+        - WFP
+      summary: Validate Disbursement
+      description: Validate disbursement.
+      x-roles:
+        - wfp_admin
+      parameters:
+        - name: walletId
+          in: query
+          description: Unique ID of the wallet
+          required: false
+          schema:
+            type: string
+        - name: houseHoldId
+          in: query
+          description: Unique ID of the household
+          required: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: Pagination offset
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: dateFrom
+          in: query
+          description: Start date filter (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          description: End date filter (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: cycleFilter
+          in: query
+          description: Filter transactions by cycle (e.g., daily, weekly, monthly)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Number of records per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - householdId
+                - cycle
+              properties:
+                householdId:
+                  type: string
+                  example: "Z876543210"
+                cycle:
+                  type: string
+                  example: "Ywh8Epr6-CDd3-PgQs-BcRr-vtRYzr8GlTP4"
+      responses:
+        "200":
+          description: Disbursement validated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Disbursement validated successfully."
+        "400":
+          description: Bad request. The provided data is invalid or missing required fields.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "No content passed."
+        "500":
+          description: Internal server error. An unexpected error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An internal server error occurred."
